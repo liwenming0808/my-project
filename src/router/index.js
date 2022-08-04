@@ -1,27 +1,83 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
-Vue.use(VueRouter)
-
+import Vue from "vue";
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
+import Layout from "../views/layout/layout";
+/**
+ * 重写路由的push方法
+ */
+const routerPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error=> error)
+}
 const routes = [
   {
+    redirect: '/login',
     path: '/',
-    name: 'home',
-    component: HomeView
+    hidden: true
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: "/login",
+    component: () => import("../views/login/login"),
+    hidden: true,
+    meta:{
+      title: '登录'
+    }
+  },
+  {
+    path: '/',
+    component: Layout,
+    meta: {
+      title: '智慧运营'
+    },
+    children: [
+      {
+        path: '/intelOperation',
+        component: () => import("../views/smartOperation/smartOperation"),
+        meta:{
+          title: '智慧运营'
+        },
+        hidden: false,
+        children: [
+          {
+            name: 'strategyArrangement',
+            path: "/strategyArrangement",
+            component: () => import("../views/smartOperation/strategyArrangement/strategyArrangement"),
+            hidden: false,
+            meta:{
+              title: '策略编排'
+            }
+          },
+          // {
+          //   path: "/strategyArrangement",
+          //   component: () => import("../views/smartOperation/strategyArrangement/strategyArrangement"),
+          //   hidden: false,
+          //   meta:{
+          //     title: '策略编排'
+          //   }
+          // },
+        ]
+      },
+    ]
   }
-]
+];
 
 const router = new VueRouter({
-  routes
+  mode: "history",
+  // base: process.env.BASE_URL,
+  routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  console.log(to)
+  document.title = to.meta.title;
+  if (to.path === '/login' || token) {
+    next();
+  } else {
+    next('/login');
+  }
 })
 
-export default router
+
+
+export default router;

@@ -1,4 +1,4 @@
 module.exports = {
-  transpileDependencies: false,
-  lintOnSave: false
-}
+  productionSourceMap: false,
+  lintOnSave: false,
+};
