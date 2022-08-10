@@ -128,9 +128,8 @@ export default {
      */
     submitForm() {
       if (this.form.name === 'admin' && +this.form.password === 123456) {
-        console.log("登录");
         this.$router.push({
-          path: '/intelOperation'
+          path: '/strategyArrangement'
         })
         localStorage.setItem('token', '123')
       } else {

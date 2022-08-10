@@ -1,9 +1,8 @@
 <template>
   <div class="aside">
     <el-menu
-        default-active="2"
+        router
         class="el-menu-vertical-demo">
-
         <div v-for="item in routerList">
           <div v-if="!item.hidden">
             <template v-for="childRoute in item.children">
@@ -13,7 +12,6 @@
                     <span>{{ childRoute.meta.title }}</span>
                   </template>
                   <template v-for="route in childRoute.children">
-                    {{ route.path}}
                     <el-menu-item :index="route.path">{{ route.meta.title }}</el-menu-item>
                   </template>
                 </el-submenu>
@@ -42,8 +40,6 @@ export default {
 
   mounted() {
     this.routerList = this.$router.options.routes;
-    console.log(this.routerList, "this.routerList")
-    // console.log(this.$route, "$route")
   }
 }
 </script>

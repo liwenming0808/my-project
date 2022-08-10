@@ -39,5 +39,8 @@ export default {
     //background-color: rgb(61, 61, 61);
     height: 100%;
   }
+  .el-main {
+    overflow-y: auto;
+  }
 }
 </style>
